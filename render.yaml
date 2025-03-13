@@ -1,0 +1,28 @@
+services:
+  # Static site service for the frontend
+  - type: web
+    name: joker-card-game-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_BASE_PATH
+        value: /
+      - key: NODE_VERSION
+        value: 18.17.0
+
+  # WebSocket server service (uncomment when you have a server implementation)
+  # - type: web
+  #   name: joker-card-game-server
+  #   env: node
+  #   buildCommand: npm install
+  #   startCommand: node dist/server/index.js
+  #   envVars:
+  #     - key: PORT
+  #       value: 10000
+  #     - key: NODE_VERSION
+  #       value: 18.17.0
