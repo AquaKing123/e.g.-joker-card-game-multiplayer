@@ -1,7 +1,8 @@
 // This is a mock server implementation for local development
 // In production, you would replace this with a real server
 
-import { Server } from "socket.io";
+// Using type import to avoid actual import during build
+import type { Server } from "socket.io";
 import { GameEventType } from "@/lib/gameEvents";
 import { CardType } from "@/components/game/Card";
 

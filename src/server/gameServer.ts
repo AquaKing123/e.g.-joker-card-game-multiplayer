@@ -15,7 +15,7 @@ export const generateMockData = () => {
     { id: "5", rank: "Q", suit: "hearts" },
     { id: "6", rank: "Joker", suit: "none" },
     { id: "7", rank: "7", suit: "diamonds" },
-  ];
+  ] as CardType[];
 
   // Mock players in the game
   const mockPlayers = [

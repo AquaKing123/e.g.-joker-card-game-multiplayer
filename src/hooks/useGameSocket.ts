@@ -125,8 +125,8 @@ export function useGameSocket({
     // Game started event
     onEvent(GameEventType.GAME_STARTED, (data) => {
       setGameState("playing");
-      setHand(data.initialHand);
-      setPlayers(data.players);
+      setHand(data.initialHand as CardType[]);
+      setPlayers(data.players as Player[]);
       addGameEvent("Game started");
     });
 
@@ -161,7 +161,7 @@ export function useGameSocket({
 
       // If the card is being passed to the current player, add it to their hand
       if (data.toPlayerId === playerId && data.card) {
-        setHand((prev) => [...prev, data.card]);
+        setHand((prev) => [...prev, data.card as CardType]);
       }
 
       // If the card is being passed from the current player, remove it from their hand
@@ -205,7 +205,7 @@ export function useGameSocket({
 
         // If the request was successful, add the card to the player's hand
         if (data.success && data.card) {
-          setHand((prev) => [...prev, data.card]);
+          setHand((prev) => [...prev, data.card as CardType]);
         }
       }
     });
@@ -220,10 +220,10 @@ export function useGameSocket({
 
       // If the current player completed the set, update their matched sets
       if (data.playerId === playerId) {
-        setMatchedSets((prev) => [...prev, data.set]);
+        setMatchedSets((prev) => [...prev, data.set as CardType[]]);
 
         // Remove the cards in the set from the player's hand
-        const setCardIds = data.set.map((card) => card.id);
+        const setCardIds = data.set.map((card: CardType) => card.id);
         setHand((prev) => prev.filter((card) => !setCardIds.includes(card.id)));
       }
     });
@@ -282,7 +282,15 @@ export function useGameSocket({
         setRoomCode(roomCode);
         setIsHost(true);
         setGameState("lobby");
-        setPlayers([{ id: playerId, name, isHost: true }]);
+        setPlayers([
+          {
+            id: playerId,
+            name,
+            isHost: true,
+            cardCount: 0,
+            isCurrentTurn: true,
+          },
+        ]);
 
         console.log(`Created mock game with room code: ${roomCode}`);
         addGameEvent(`Game room created with code: ${roomCode}`);
@@ -311,9 +319,27 @@ export function useGameSocket({
 
         // Create mock players including the host and this player
         setPlayers([
-          { id: "host-player", name: "Game Host", isHost: true },
-          { id: playerId, name, isHost: false },
-          { id: "ai-player-1", name: "AI Player 1", isHost: false },
+          {
+            id: "host-player",
+            name: "Game Host",
+            isHost: true,
+            cardCount: 7,
+            isCurrentTurn: false,
+          },
+          {
+            id: playerId,
+            name,
+            isHost: false,
+            cardCount: 7,
+            isCurrentTurn: false,
+          },
+          {
+            id: "ai-player-1",
+            name: "AI Player 1",
+            isHost: false,
+            cardCount: 7,
+            isCurrentTurn: false,
+          },
         ]);
 
         console.log(`Joined mock game with room code: ${code}`);

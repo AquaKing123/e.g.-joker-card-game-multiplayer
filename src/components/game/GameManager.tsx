@@ -10,14 +10,11 @@ import { useGameSocket } from "@/hooks/useGameSocket";
 
 import { SERVER_URL } from "@/server/gameServer";
 
-// Make sure Player interfaces are compatible
-type LocalPlayer = {
-  id: string;
-  name: string;
-  isHost: boolean;
-  cardCount: number;
-  isCurrentTurn: boolean;
-};
+// Import Player interface to ensure compatibility
+import { Player as ImportedPlayer } from "@/hooks/useGameSocket";
+
+// Local type that matches the imported Player interface
+type LocalPlayer = ImportedPlayer;
 
 export default function GameManager() {
   const [showSetAnimation, setShowSetAnimation] = useState(false);

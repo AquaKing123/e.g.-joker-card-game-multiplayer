@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { useRoutes, Routes, Route } from "react-router-dom";
 import Home from "./components/home";
+// @ts-ignore - tempo-routes is provided by the Tempo platform
 import routes from "tempo-routes";
 
 function App() {
