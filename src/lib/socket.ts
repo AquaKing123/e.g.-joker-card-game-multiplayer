@@ -1,10 +1,11 @@
-import { io, Socket } from "socket.io-client";
+import { io as socketIo } from "socket.io-client";
+import type { Socket } from "socket.io-client";
 
 let socket: Socket | null = null;
 
 export const initializeSocket = (url: string): Socket => {
   if (!socket) {
-    socket = io(url, {
+    socket = socketIo(url, {
       transports: ["websocket"],
       autoConnect: true,
     });

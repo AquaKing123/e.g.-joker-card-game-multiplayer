@@ -6,15 +6,12 @@ import GameOver from "./GameOver";
 import SetAnimation from "./SetAnimation";
 import ConnectionStatus from "./ConnectionStatus";
 import MultiplayerInfo from "./MultiplayerInfo";
-import { useGameSocket } from "@/hooks/useGameSocket";
+import { useGameSocket, Player } from "@/hooks/useGameSocket";
 
 import { SERVER_URL } from "@/server/gameServer";
 
-// Import Player interface to ensure compatibility
-import { Player as ImportedPlayer } from "@/hooks/useGameSocket";
-
 // Local type that matches the imported Player interface
-type LocalPlayer = ImportedPlayer;
+type LocalPlayer = Player;
 
 export default function GameManager() {
   const [showSetAnimation, setShowSetAnimation] = useState(false);
