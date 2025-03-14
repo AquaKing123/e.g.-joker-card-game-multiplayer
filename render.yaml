@@ -11,7 +11,7 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_BASE_PATH
-        value: /
+        value: ""
       - key: NODE_VERSION
         value: 18.17.0
 

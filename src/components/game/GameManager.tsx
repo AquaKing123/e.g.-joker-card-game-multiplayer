@@ -10,6 +10,15 @@ import { useGameSocket } from "@/hooks/useGameSocket";
 
 import { SERVER_URL } from "@/server/gameServer";
 
+// Make sure Player interfaces are compatible
+type LocalPlayer = {
+  id: string;
+  name: string;
+  isHost: boolean;
+  cardCount: number;
+  isCurrentTurn: boolean;
+};
+
 export default function GameManager() {
   const [showSetAnimation, setShowSetAnimation] = useState(false);
   const [completedSet, setCompletedSet] = useState<any>(null);
@@ -62,14 +71,38 @@ export default function GameManager() {
             roomCode={roomCode}
             players={
               players.length > 0
-                ? players
+                ? (players as unknown as LocalPlayer[])
                 : [
-                    { id: playerId, name: playerName, isHost },
-                    { id: "mock1", name: "Waiting...", isHost: false },
-                    { id: "mock2", name: "Waiting...", isHost: false },
+                    {
+                      id: playerId,
+                      name: playerName,
+                      isHost,
+                      cardCount: 0,
+                      isCurrentTurn: false,
+                    },
+                    {
+                      id: "mock1",
+                      name: "Waiting...",
+                      isHost: false,
+                      cardCount: 0,
+                      isCurrentTurn: false,
+                    },
+                    {
+                      id: "mock2",
+                      name: "Waiting...",
+                      isHost: false,
+                      cardCount: 0,
+                      isCurrentTurn: false,
+                    },
                   ]
             }
-            currentPlayer={{ id: playerId, name: playerName, isHost }}
+            currentPlayer={{
+              id: playerId,
+              name: playerName,
+              isHost,
+              cardCount: 0,
+              isCurrentTurn: false,
+            }}
             onStartGame={actions.startGame}
             onCopyRoomCode={handleCopyRoomCode}
           />
@@ -86,14 +119,15 @@ export default function GameManager() {
       return (
         <>
           <GameBoard
-            players={players}
+            players={players as unknown as LocalPlayer[]}
             currentPlayer={
-              players.find((p) => p.id === playerId) || {
+              (players.find((p) => p.id === playerId) || {
                 id: playerId,
                 name: playerName,
                 cardCount: hand.length,
                 isCurrentTurn: false,
-              }
+                isHost: false,
+              }) as LocalPlayer
             }
             hand={hand}
             gameEvents={gameEvents}

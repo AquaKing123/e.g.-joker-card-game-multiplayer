@@ -8,7 +8,7 @@ import {
   offEvent,
 } from "@/lib/socket";
 import { GameEventType } from "@/lib/gameEvents";
-import { CardType } from "@/components/game/Card";
+import { CardType, CardRank, CardSuit } from "@/components/game/Card";
 import {
   SERVER_URL,
   generateMockData,
@@ -19,9 +19,9 @@ import {
 export interface Player {
   id: string;
   name: string;
-  isHost?: boolean;
-  cardCount?: number;
-  isCurrentTurn?: boolean;
+  isHost: boolean;
+  cardCount: number;
+  isCurrentTurn: boolean;
 }
 
 export interface GameEvent {
@@ -429,26 +429,30 @@ export function useGameSocket({
 
             // 50% chance AI will pass a card back
             if (Math.random() > 0.5) {
-              const randomCard = {
+              const ranks = [
+                "A",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "J",
+                "Q",
+                "K",
+              ] as const;
+              const suits = ["hearts", "diamonds", "clubs", "spades"] as const;
+              const randomCard: CardType = {
                 id: `ai-card-${Date.now()}`,
-                rank: [
-                  "A",
-                  "2",
-                  "3",
-                  "4",
-                  "5",
-                  "6",
-                  "7",
-                  "8",
-                  "9",
-                  "10",
-                  "J",
-                  "Q",
-                  "K",
-                ][Math.floor(Math.random() * 13)],
-                suit: ["hearts", "diamonds", "clubs", "spades"][
-                  Math.floor(Math.random() * 4)
-                ],
+                rank: ranks[
+                  Math.floor(Math.random() * ranks.length)
+                ] as CardRank,
+                suit: suits[
+                  Math.floor(Math.random() * suits.length)
+                ] as CardSuit,
               };
 
               addGameEvent(`${currentTurnPlayer.name} passed a card to you`);
@@ -503,11 +507,11 @@ export function useGameSocket({
 
         // 60% chance of getting a card
         if (Math.random() > 0.4) {
-          const suits = ["hearts", "diamonds", "clubs", "spades"];
-          const newCard = {
+          const suits = ["hearts", "diamonds", "clubs", "spades"] as const;
+          const newCard: CardType = {
             id: `new-${Date.now()}`,
-            rank,
-            suit: suits[Math.floor(Math.random() * suits.length)],
+            rank: rank as CardRank,
+            suit: suits[Math.floor(Math.random() * suits.length)] as CardSuit,
           };
 
           setHand((prev) => [...prev, newCard]);
@@ -702,26 +706,26 @@ export function useGameSocket({
           }
         } else {
           // AI passes a card to player
-          const randomCard = {
+          const ranks = [
+            "A",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "J",
+            "Q",
+            "K",
+          ] as const;
+          const suits = ["hearts", "diamonds", "clubs", "spades"] as const;
+          const randomCard: CardType = {
             id: `ai-card-${Date.now()}`,
-            rank: [
-              "A",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "J",
-              "Q",
-              "K",
-            ][Math.floor(Math.random() * 13)],
-            suit: ["hearts", "diamonds", "clubs", "spades"][
-              Math.floor(Math.random() * 4)
-            ],
+            rank: ranks[Math.floor(Math.random() * ranks.length)] as CardRank,
+            suit: suits[Math.floor(Math.random() * suits.length)] as CardSuit,
           };
 
           addGameEvent(`${aiPlayer.name} passed a card to you`);
