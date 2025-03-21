@@ -364,9 +364,9 @@ export function useGameSocket({
       const updatedPlayers = mockPlayers.map((player, index) => {
         if (index === 0) {
           // First player is the current user
-          return { ...player, id: playerId, name: playerName };
+          return { ...player, id: playerId, name: playerName, isHost: true };
         }
-        return player;
+        return { ...player, isHost: false };
       });
 
       setHand(mockCards);

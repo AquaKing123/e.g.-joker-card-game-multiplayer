@@ -5,6 +5,7 @@ services:
     env: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
+    startCommand: echo "Starting static site"
     routes:
       - type: rewrite
         source: /*
